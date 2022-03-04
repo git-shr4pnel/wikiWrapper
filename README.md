@@ -1,5 +1,5 @@
 # wikiWrapper
-## ABOUT
+## About
 wikiWrapper is a basic python module designed to make working with the mediawiki action API easier.
 ## Usage
 ### Install:
