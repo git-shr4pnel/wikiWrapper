@@ -14,10 +14,8 @@ responses = {
 
 class SearchQuery:
     def __init__(self, search, host="wikipedia", srnamespace=0, srlimit=10, sroffset=0, srqiprofile="classic",
-                 action="query", call_list="search", rtn_format="json"):
-        self.action = action
+                 rtn_format="json"):
         self.host = host
-        self.call_list = call_list
         self.search = search
         self.rtn_format = rtn_format
         self.search = search
@@ -26,12 +24,13 @@ class SearchQuery:
         self.sroffset = sroffset
         self.srqiprofile = srqiprofile
         self.url = None
+        self.response = None
         self.__GET()
 
     def __GET(self):
         payload = {
-            "action": self.action,
-            "list": self.call_list,
+            "action": "query",
+            "list": "search",
             "format": self.rtn_format,
             "srsearch": self.search,
             "srnamespace": self.srnamespace,
@@ -44,7 +43,7 @@ class SearchQuery:
         except KeyError:
             raise RuntimeError("Invalid host specified")
         self.url = get_wiki_url(r, self.host)
-        return r
+        self.response = r
 
 
 def get_wiki_url(pid, response):
