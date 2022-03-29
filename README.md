@@ -27,14 +27,3 @@ SearchQuery parameters:
 ```sroffset```: This should be an integer or a string. Shifts results forward by specified amount. The default value of this parameter is ```0```
 
 ```srqiprofile```: This should be a string. Chooses the algorithm used by the MediaWiki API to find your search results. The default value of this parameter is ```"classic"```. Accepted values are ```("classic", "classic_noboostlinks", "empty", "wsum_inclinks", "wsum_inclinks_pv", "popular_inclinks_pv", "popular_inclinks", "engine_autoselect")```
-
-### Accessing data from API call:
-Your API call has 2 useful attributes, ```url``` and ```response```.
-
-```py
-import wikiWrapper
-query = wikiWrapper.SearchQuery("Don Quixote")
-print(query.url, query.response)
->>> https://en.wikipedia.org/?curid=8237 <Response [200]>
-```
-Response is a ```requests``` object. The documentation for ```requests``` can be found [here](https://docs.python-requests.org/). ```url``` points directly to the page using the page ID itself. 
