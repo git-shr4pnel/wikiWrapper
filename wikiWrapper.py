@@ -1,4 +1,6 @@
 import requests
+import json
+from bs4 import BeautifulSoup as bs
 
 hosts = {
     "wikipedia": "https://en.wikipedia.org/w/api.php",
@@ -13,26 +15,25 @@ responses = {
 
 
 class SearchQuery:
-    def __init__(self, search, host="wikipedia", srnamespace=0, srlimit=10, sroffset=0, srqiprofile="classic",
-                 rtn_format="json"):
+    def __init__(self, search_q, host="wikipedia", srnamespace=0, srlimit=10, sroffset=0, srqiprofile="classic",
+                 action="query", _list="search", _format="json"):
+        self.action = action
         self.host = host
-        self.search = search
-        self.rtn_format = rtn_format
-        self.search = search
+        self.list = _list
+        self.search_q = search_q
+        self.format = _format
         self.srnamespace = srnamespace
         self.srlimit = srlimit
         self.sroffset = sroffset
         self.srqiprofile = srqiprofile
         self.url = None
-        self.response = None
-        self.__GET()
 
-    def __GET(self):
+    def search(self):
         payload = {
-            "action": "query",
-            "list": "search",
-            "format": self.rtn_format,
-            "srsearch": self.search,
+            "action": self.action,
+            "list": self.list,
+            "format": self.format,
+            "srsearch": self.search_q,
             "srnamespace": self.srnamespace,
             "srlimit": self.srlimit,
             "sroffset": self.sroffset,
@@ -43,14 +44,37 @@ class SearchQuery:
         except KeyError:
             raise RuntimeError("Invalid host specified")
         self.url = get_wiki_url(r, self.host)
-        self.response = r
+        return r
+
+    def content_summary(self):
+        pid = get_wiki_url(self.search(), self.host, rtn_pid=True)
+        payload = {
+            "action": "query",
+            "prop": "extracts",
+            "exintro": "explaintext",
+            "redirects": 1,
+            "pageids": pid,
+            "format": self.format
+        }
+        r = requests.get(hosts[self.host], params=payload)
+        # decodes bytes into str type
+        utf_raw = r.content.decode("utf-8")
+        # turns str into dict
+        raw = json.loads(utf_raw)
+        # gets HTML data and turns it into a bs4 object
+        html_data = raw["query"]["pages"][str(pid)]["extract"]
+        soup = bs(html_data, "html.parser")
+        content = "".join(soup.find_all(text=True))
+        return content.strip()
 
 
-def get_wiki_url(pid, response):
+def get_wiki_url(pid, response, rtn_pid=False):
     if type(pid) is not requests.models.Response:
         raise TypeError("Argument must be a requests object")
     try:
         pid = pid.json()["query"]["search"][0]["pageid"]
     except IndexError:
         return None
+    if rtn_pid:
+        return pid
     return f"{responses[response]}{pid}"
