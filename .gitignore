@@ -1,2 +1,7 @@
 .idea
 venv
+main.py
+poetry.lock
+pyproject.toml
+.replit
+__pycache__/

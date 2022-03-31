@@ -15,11 +15,10 @@ responses = {
 
 
 class SearchQuery:
-    def __init__(self, search_q, host="wikipedia", srnamespace=0, srlimit=10, sroffset=0, srqiprofile="classic",
-                 action="query", _list="search", _format="json"):
-        self.action = action
+    def __init__(self, search_q, host="wikipedia", srnamespace=0, srlimit=10, sroffset=0, srqiprofile="classic", _format="json"):
+        self.action = "query"
+        self.list = "search"
         self.host = host
-        self.list = _list
         self.search_q = search_q
         self.format = _format
         self.srnamespace = srnamespace
