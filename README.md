@@ -26,7 +26,10 @@ SearchQuery parameters:
 
 ```_format```: The format you want your data back in. Default value is ```"json"```
 
-### Content Summaries
+### Methods
+
+```query.search()```:
+Returns raw HTTP request from the wikipedia page.
 
 ```query.content_summary()```: 
 Returns the content summary of the search_q parameter's wiki page.
