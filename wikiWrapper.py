@@ -1,5 +1,6 @@
 import requests
 import json
+import sys
 from bs4 import BeautifulSoup as bs
 
 hosts = {
@@ -65,6 +66,20 @@ class SearchQuery:
         soup = bs(html_data, "html.parser")
         content = "".join(soup.find_all(text=True))
         return content.strip()
+
+    def extlinks(self, page_limit=None):
+        limit = self.srlimit
+        if page_limit:
+            limit = page_limit
+        payload = {
+            "action": "query",
+            "prop": "extlinks",
+            "titles": self.search_q,
+            "ellimit": limit,
+            "format": "json"
+        }
+        r = requests.get(hosts[self.host], params=payload)
+        return r.json()
 
 
 def get_wiki_url(pid, response, rtn_pid=False):

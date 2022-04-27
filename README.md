@@ -1,8 +1,20 @@
 # wikiWrapper
 ## About
-wikiWrapper is a basic python module designed to make working with the mediawiki action API easier.
+wikiWrapper is a basic python module designed to make working with the Mediawiki action API easier.
 ## Usage
-Just place wikiWrapper.py in your working directory and import it into your program. It will be available on PyPi soon.
+Just place wikiWrapper.py in your working directory and import it into your program. Alternatively, install via pypi on the command line using your preferred package manager.
+### Install (pip)
+#### Windows:
+```cmd
+py -m pip install wikiWrapper
+```
+Note: by default, python will be placed in your PATH environment variable directly as 'py'. If python is not present in your PATH, reinstall python, add it manually, or install in your python directory.
+
+#### MacOS & Linux:
+```bash
+python310 -m pip install wikiWrapper
+```
+Note: assumes you are using Python version 3.10. Substitute 310 for your version of python, i.e python39.
 ### Creating a search:
 ```py
 import wikiWrapper
@@ -33,3 +45,6 @@ Returns raw HTTP request from the wikipedia page.
 
 ```query.content_summary()```: 
 Returns the content summary of the search_q parameter's wiki page.
+
+```query.extlinks(page_limit=None)```
+Returns a json dictionary containing every outwards facing link on the page (usually references). Method takes one optional parameter, an integer between 1 and 500.
